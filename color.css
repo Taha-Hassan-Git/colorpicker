@@ -1,0 +1,42 @@
+body{
+    /* background-color: black; */
+}
+.header{
+    display: flex;
+    justify-content: space-around;
+    height: 10vh;
+    width: 100%;
+}
+.container{
+    display: flex;
+    flex-direction: row;
+    background-color: black;
+    height: 88vh;
+    width: 100%;
+}
+.color{
+    display: flex;
+    justify-content:space-between;
+    align-items: center;
+    height: 20%;
+    background-color: aqua;
+    border: 1px solid black;
+}
+.icons{
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    width:50%;
+    justify-self: left;
+}
+.name{
+    margin-right: 35px;
+}
+
+
+@media only screen and (max-width: 850px){
+    .container {
+    display: flex;
+    flex-direction: column;
+    }
+}
