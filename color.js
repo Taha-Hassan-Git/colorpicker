@@ -23,7 +23,11 @@ function randomColor(element){
 
 function handleLock(e){
     const parentElement = e.target.parentNode.parentNode;
-    parentElement.classList.add("locked");
+    if (parentElement.classList.contains("locked")){
+        parentElement.classList.remove("locked")
+    } else {
+        parentElement.classList.add("locked");
+    }
 }
 
 document.querySelectorAll('.color').forEach(randomColor);

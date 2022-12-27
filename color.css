@@ -1,5 +1,5 @@
 body{
-    /* background-color: black; */
+    background-color: white;
 }
 .header{
     display: flex;
@@ -10,20 +10,21 @@ body{
 .container{
     display: flex;
     flex-direction: row;
-    background-color: black;
     height: 88vh;
     width: 100%;
 }
 .color{
     display: flex;
+    flex-direction: column;
     justify-content:space-between;
     align-items: center;
-    height: 20%;
+    width: 20%;
     background-color: aqua;
     border: 1px solid black;
 }
 .icons{
     display: flex;
+    flex-direction: column;
     justify-content: space-around;
     align-items: center;
     width:50%;
@@ -33,10 +34,35 @@ body{
     margin-right: 35px;
 }
 
+#canvas {
+    position: absolute;
+    z-index: 2;
+    pointer-events: none;
+    top: 0;
+    left: 0;
+    bottom: 0;
+  }
+
 
 @media only screen and (max-width: 850px){
     .container {
     display: flex;
     flex-direction: column;
+    height: 88vh;
+    width: 100%;
     }
+    .color {
+        flex-direction: row;
+        height: 20%;
+        width: 100%;
+    }
+    .icons{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    width:50%;
+    justify-self: left;
 }
+}
+
