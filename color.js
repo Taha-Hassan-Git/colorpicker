@@ -1,10 +1,8 @@
 const generateBtn = document.getElementById("generate");
 const showerBtn = document.getElementById("shower");
 const lockBtnArray = document.querySelectorAll(".lock");
-var c = document.getElementById("canvas");
-var ctx = c.getContext("2d");
-canvas.height = window.innerHeight;
-canvas.width = window.innerWidth;
+
+generateColors()
 
 lockBtnArray.forEach((element) => {
     //adds the event listener for the lock icon
@@ -14,15 +12,14 @@ function handleLock(e){
     //when lock icon is clicked it toggles the classname "locked"
     const parentElement = e.target.parentNode.parentNode;
     if (parentElement.classList.contains("locked")){
-        parentElement.classList.remove("locked")
+        parentElement.classList.remove("locked");
     } else {
         parentElement.classList.add("locked");
     }
 }
 
-generateBtn.addEventListener("click", randomColor);
-
-function randomColor(){
+generateBtn.addEventListener("click", generateColors);
+function howManyLocked(){
     let lockedArray = [];
     let unlockedArray = [];
     document.querySelectorAll('.color').forEach(element =>{
@@ -31,72 +28,46 @@ function randomColor(){
     } else {
         unlockedArray.push(element);
     }});
-    if (lockedArray.length == 0){
-        var randomColor = "#" + Math.floor(Math.random()*16777215).toString(16);
-        generationMethod = getRandomIntInclusive(1,4);
-        if (generationMethod == 1){
-            var colorArray = generateComplementaryColors(randomColor);
-        } if (generationMethod == 2){
-            var colorArray = generateMonochromaticColors(randomColor);
-        } else {
-            var colorArray = generateTriadicColors(randomColor);
-        }
-        colorArray.unshift(randomColor);
-        unlockedArray.forEach((element, index) =>{
+    return {"lockedArray": lockedArray, "unlockedArray": unlockedArray}
+}
+function generateColors(){
+    var colorArray = [];
+    var lockedUnlocked = howManyLocked();
+    if (lockedUnlocked.lockedArray.length == 0){
+        var randomColor = "#" + Math.random().toString(16).substring(2, 8);
+        console.log(randomColor);
+        let newColorObj = similarColors(randomColor)
+        newColorObj[0] = randomColor;
+        lockedUnlocked.unlockedArray.forEach((element, index) =>{
             const colorName = element.querySelector('.name');
-            element.style.backgroundColor = colorArray[index];
-            colorName.innerHTML = colorArray[index];
+            element.style.backgroundColor = newColorObj[index];
+            colorName.innerHTML = newColorObj[index];
         });
-    } 
+    } else {
+        
+    }
 };
 
-function generateTriadicColors(hex) {
+function similarColors(color) {
     // Convert the input color to RGB
-    let rgb = hex2rgb(hex);
+    let rgb = hex2rgb(color);
     let r = rgb[0];
     let g = rgb[1];
     let b = rgb[2];
-  
-    // Generate the triadic colors
-    let color1 = rgbToHex(r, g, 255 - b);
-    let color2 = rgbToHex(255 - r, g, b);
-    let color3 = rgbToHex(Math.floor(255 - r * 0.4), Math.floor(g * 0.4), Math.floor(b * 0.4));
-    let color4 = rgbToHex(Math.floor(r * 0.2), Math.floor(g * 0.2), Math.floor(255 - b * 0.2));
-  
-    return [color1, color2, color3, color4];
-  }
-
-function generateMonochromaticColors(hex) {
-    // Convert the input color to RGB
-    let rgb = hex2rgb(hex);
-    let r = rgb[0];
-    let g = rgb[1];
-    let b = rgb[2];
-  
-    // Generate the monochromatic colors
-    let color1 = rgbToHex(Math.floor(r * 0.8), Math.floor(g * 0.8), Math.floor(b * 0.8));
-    let color2 = rgbToHex(Math.floor(r * 0.6), Math.floor(g * 0.6), Math.floor(b * 0.6));
-    let color3 = rgbToHex(Math.floor(r * 0.4), Math.floor(g * 0.4), Math.floor(b * 0.4));
-    let color4 = rgbToHex(Math.floor(r * 0.2), Math.floor(g * 0.2), Math.floor(b * 0.2));
-  
-    return [color1, color2, color3, color4];
-  }
-
-function generateComplementaryColors(hex) {
-    // Convert the input color to RGB
-  let rgb = hex2rgb(hex);
-  let r = rgb[0];
-  let g = rgb[1];
-  let b = rgb[2];
-
-  // Generate the complementary colors
-  let color1 = rgbToHex(255 - r, 255 - g, 255 - b);
-  let color2 = rgbToHex(255 - r, g, b);
-  let color3 = rgbToHex(r, 255 - g, b);
-  let color4 = rgbToHex(r, g, 255 - b);
-
-  return [color1, color2, color3, color4];
-}
+    var newColorObj = {
+        "0": "",
+        "1": rgbToHex(b , r, g),
+        "2": rgbToHex(normalise(r+40), normalise(g+40), normalise(b+40)),
+        "3": rgbToHex(normalise(b+40), normalise(r+40), normalise(g+40)),
+        "4": rgbToHex(normalise(r-40), normalise(g-40), normalise(b-40)),
+        "5": rgbToHex(normalise(b-40), normalise(r-40), normalise(g-40)),
+        "6": rgbToHex(255-r, g, b),
+        "7": rgbToHex(r, 255-g, b),
+        "8": rgbToHex(r, g, 255-b),
+        "9": "#" + Math.random().toString(16).substring(2, 8)
+    }
+    return newColorObj
+} 
 
 function hex2rgb(hexa){
     var r = parseInt(hexa.slice(1,3), 16);
@@ -105,13 +76,7 @@ function hex2rgb(hexa){
     return [r,g,b]
   }
 function rgbToHex(r, g, b) {
-// Convert the red, green, and blue values to hexadecimal strings
-let hexR = r.toString(16).padStart(2, "0");
-let hexG = g.toString(16).padStart(2, "0");
-let hexB = b.toString(16).padStart(2, "0");
-
-// Concatenate the hexadecimal strings and add the "#" prefix
-return "#" + hexR + hexG + hexB;
+  return "#" + (1 << 24 | r << 16 | g << 8 | b).toString(16).slice(1);
 }
 
 function getRandomIntInclusive(min, max) {
@@ -120,5 +85,14 @@ function getRandomIntInclusive(min, max) {
     max = Math.floor(max);
     return Math.floor(Math.random() * (max - min + 1) + min);
 }
-
+function normalise(value){
+    let max = 255
+    let min = 0
+    if (value > 255){
+        value = 255
+    }  if (value < 0){
+        value = 0
+    }
+    return value
+}
 
