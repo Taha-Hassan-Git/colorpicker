@@ -31,11 +31,9 @@ function howManyLocked(){
     return {"lockedArray": lockedArray, "unlockedArray": unlockedArray}
 }
 function generateColors(){
-    var colorArray = [];
     var lockedUnlocked = howManyLocked();
     if (lockedUnlocked.lockedArray.length == 0){
         var randomColor = "#" + Math.random().toString(16).substring(2, 8);
-        console.log(randomColor);
         let newColorObj = similarColors(randomColor)
         newColorObj[0] = randomColor;
         lockedUnlocked.unlockedArray.forEach((element, index) =>{
@@ -44,7 +42,15 @@ function generateColors(){
             colorName.innerHTML = newColorObj[index];
         });
     } else {
-        
+        seedColors = []
+        lockedUnlocked.lockedArray.forEach(element => seedColors.push(element.querySelector('.name').innerHTML));
+        let newColorObj = similarColors(seedColors[getRandomIntInclusive(0, seedColors.length -1)]);
+        lockedUnlocked.unlockedArray.forEach((element, index) =>{
+            const colorName = element.querySelector('.name');
+            let randomColor = newColorObj[getRandomIntInclusive(1,11)];
+            element.style.backgroundColor = randomColor;
+            colorName.innerHTML = randomColor;
+        });
     }
 };
 
@@ -55,7 +61,7 @@ function similarColors(color) {
     let g = rgb[1];
     let b = rgb[2];
     var newColorObj = {
-        "0": "",
+        "0": '',
         "1": rgbToHex(b , r, g),
         "2": rgbToHex(normalise(r+40), normalise(g+40), normalise(b+40)),
         "3": rgbToHex(normalise(b+40), normalise(r+40), normalise(g+40)),
@@ -64,7 +70,9 @@ function similarColors(color) {
         "6": rgbToHex(255-r, g, b),
         "7": rgbToHex(r, 255-g, b),
         "8": rgbToHex(r, g, 255-b),
-        "9": "#" + Math.random().toString(16).substring(2, 8)
+        "9": "#" + Math.random().toString(16).substring(2, 8),
+        "10": "#" + Math.random().toString(16).substring(2, 8),
+        "11": "#" + Math.random().toString(16).substring(2, 8),
     }
     return newColorObj
 } 
