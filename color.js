@@ -13,8 +13,12 @@ function handleLock(e){
     const parentElement = e.target.parentNode.parentNode;
     if (parentElement.classList.contains("locked")){
         parentElement.classList.remove("locked");
+        e.target.classList.remove("fa-lock");
+        e.target.classList.add("fa-lock-open");
     } else {
         parentElement.classList.add("locked");
+        e.target.classList.remove("fa-lock-open");
+        e.target.classList.add("fa-lock");
     }
 }
 
@@ -38,8 +42,15 @@ function generateColors(){
         newColorObj[0] = randomColor;
         lockedUnlocked.unlockedArray.forEach((element, index) =>{
             const colorName = element.querySelector('.name');
-            element.style.backgroundColor = newColorObj[index];
-            colorName.innerHTML = newColorObj[index];
+            let newColor = newColorObj[index];
+            element.style.backgroundColor = newColor;
+            element.style.color = "black";
+            colorName.innerHTML = newColor;
+            let rgbNewColor = hex2rgb(newColor);
+            if (rgbNewColor[0]  < 100 && rgbNewColor[1]  < 100&& rgbNewColor [2] < 100){
+                element.style.color = "white";
+                console.log("Dark: " + newColor);
+            }
         });
     } else {
         seedColors = []
@@ -49,7 +60,12 @@ function generateColors(){
             const colorName = element.querySelector('.name');
             let randomColor = newColorObj[getRandomIntInclusive(1,11)];
             element.style.backgroundColor = randomColor;
+            element.style.color = "black";
             colorName.innerHTML = randomColor;
+            let rgbRandomColor = hex2rgb(randomColor);
+            if (rgbRandomColor[0]  < 100 && rgbRandomColor[1]  < 100 && rgbRandomColor[2] < 140){
+                element.style.color = "white";
+            }
         });
     }
 };
@@ -94,8 +110,6 @@ function getRandomIntInclusive(min, max) {
     return Math.floor(Math.random() * (max - min + 1) + min);
 }
 function normalise(value){
-    let max = 255
-    let min = 0
     if (value > 255){
         value = 255
     }  if (value < 0){

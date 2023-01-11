@@ -33,7 +33,9 @@ body{
 .name{
     margin-right: 35px;
 }
-
+.lock{
+    height: 30px;
+}
 #canvas {
     position: absolute;
     z-index: 2;
