@@ -22,7 +22,6 @@ body{
     align-items: center;
     width: 20%;
     background-color: aqua;
-    border: 1px solid black;
 }
 .icons{
     display: flex;
