@@ -2,6 +2,7 @@ const generateBtn = document.getElementById("generate");
 const showerBtn = document.getElementById("shower");
 const lockBtnArray = document.querySelectorAll(".lock");
 
+//generates colours on page load
 generateColors()
 
 lockBtnArray.forEach((element) => {
@@ -10,6 +11,7 @@ lockBtnArray.forEach((element) => {
 })
 function handleLock(e){
     //when lock icon is clicked it toggles the classname "locked"
+    //and changes the lock icon
     const parentElement = e.target.parentNode.parentNode;
     if (parentElement.classList.contains("locked")){
         parentElement.classList.remove("locked");
@@ -24,6 +26,8 @@ function handleLock(e){
 
 generateBtn.addEventListener("click", generateColors);
 function howManyLocked(){
+    //checks how many colour elements are locked/unlocked
+    //returns an object with two arrays of locked/unlocked elements
     let lockedArray = [];
     let unlockedArray = [];
     document.querySelectorAll('.color').forEach(element =>{
@@ -35,8 +39,11 @@ function howManyLocked(){
     return {"lockedArray": lockedArray, "unlockedArray": unlockedArray}
 }
 function generateColors(){
+    //find how many are locked
     var lockedUnlocked = howManyLocked();
     if (lockedUnlocked.lockedArray.length == 0){
+        //If there are no locked elements then generate a random colour
+        //to put into the similarColors function
         var randomColor = "#" + Math.random().toString(16).substring(2, 8);
         let newColorObj = similarColors(randomColor)
         newColorObj[0] = randomColor;
@@ -47,16 +54,20 @@ function generateColors(){
             element.style.color = "black";
             colorName.innerHTML = newColor;
             let rgbNewColor = hex2rgb(newColor);
+            //check brightness of the colour and change between white
+            //and black text accordingly
             if (rgbNewColor[0]  < 100 && rgbNewColor[1]  < 100&& rgbNewColor [2] < 100){
                 element.style.color = "white";
                 console.log("Dark: " + newColor);
             }
         });
     } else {
+        //Make an array of locked colours and select one at random
+        //to feed into similarcolors function
         seedColors = []
         lockedUnlocked.lockedArray.forEach(element => seedColors.push(element.querySelector('.name').innerHTML));
         let newColorObj = similarColors(seedColors[getRandomIntInclusive(0, seedColors.length -1)]);
-        lockedUnlocked.unlockedArray.forEach((element, index) =>{
+        lockedUnlocked.unlockedArray.forEach((element) =>{
             const colorName = element.querySelector('.name');
             let randomColor = newColorObj[getRandomIntInclusive(1,11)];
             element.style.backgroundColor = randomColor;
@@ -76,16 +87,25 @@ function similarColors(color) {
     let r = rgb[0];
     let g = rgb[1];
     let b = rgb[2];
+    //generate an object of similar colours, complementary colours invert the 
+    //rgb values, and tertiary colours invert just one of the three values.
+    //The object also generates darker and lighter shades of these similar colours
+    //as well as the original colour, and 3 completely random colours.
     var newColorObj = {
+        //left blank for generateColors function to add the seed colour
         "0": '',
-        "1": rgbToHex(b , r, g),
-        "2": rgbToHex(normalise(r+40), normalise(g+40), normalise(b+40)),
-        "3": rgbToHex(normalise(b+40), normalise(r+40), normalise(g+40)),
-        "4": rgbToHex(normalise(r-40), normalise(g-40), normalise(b-40)),
+        //lighter/darker shades of seed colour
+        "1": rgbToHex(normalise(r+40), normalise(g+40), normalise(b+40)),
+        "2": rgbToHex(normalise(r-40), normalise(g-40), normalise(b-40)),
+        //inverted values, complementary colour and shades of it
+        "3": rgbToHex(b , r, g),
+        "4": rgbToHex(normalise(b+40), normalise(r+40), normalise(g+40)),
         "5": rgbToHex(normalise(b-40), normalise(r-40), normalise(g-40)),
+        //Tertiary colours, one value inverted
         "6": rgbToHex(255-r, g, b),
         "7": rgbToHex(r, 255-g, b),
         "8": rgbToHex(r, g, 255-b),
+        //random colours
         "9": "#" + Math.random().toString(16).substring(2, 8),
         "10": "#" + Math.random().toString(16).substring(2, 8),
         "11": "#" + Math.random().toString(16).substring(2, 8),
@@ -110,6 +130,7 @@ function getRandomIntInclusive(min, max) {
     return Math.floor(Math.random() * (max - min + 1) + min);
 }
 function normalise(value){
+    //Bring rgb values back to max and min values
     if (value > 255){
         value = 255
     }  if (value < 0){
