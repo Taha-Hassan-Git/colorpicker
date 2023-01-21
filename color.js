@@ -95,12 +95,12 @@ function similarColors(color) {
         //left blank for generateColors function to add the seed colour
         "0": '',
         //lighter/darker shades of seed colour
-        "1": rgbToHex(normalise(r+40), normalise(g+40), normalise(b+40)),
-        "2": rgbToHex(normalise(r-40), normalise(g-40), normalise(b-40)),
+        "1": rgbToHex(normalise(r+60), normalise(g+60), normalise(b+60)),
+        "2": rgbToHex(normalise(r-60), normalise(g-60), normalise(b-60)),
         //inverted values, complementary colour and shades of it
         "3": rgbToHex(b , r, g),
-        "4": rgbToHex(normalise(b+40), normalise(r+40), normalise(g+40)),
-        "5": rgbToHex(normalise(b-40), normalise(r-40), normalise(g-40)),
+        "4": rgbToHex(normalise(b+60), normalise(r+60), normalise(g+60)),
+        "5": rgbToHex(normalise(b-60), normalise(r-60), normalise(g-60)),
         //Tertiary colours, one value inverted
         "6": rgbToHex(255-r, g, b),
         "7": rgbToHex(r, 255-g, b),
