@@ -85,6 +85,8 @@ function generateColors(){
             let randomColor = newColorObj[getRandomIntInclusive(1,11)];
             element.style.backgroundColor = randomColor;
             colorName.innerHTML = randomColor;
+            //change value of color input
+            element.childNodes[1].childNodes[5].value = randomColor;
             let rgbRandomColor = hex2rgb(randomColor);
             contrastCheck(rgbRandomColor, element);
         });
