@@ -2,10 +2,21 @@ const generateBtn = document.getElementById("generate");
 const showerBtn = document.getElementById("shower");
 const lockBtnArray = document.querySelectorAll(".lock");
 const btnArray = document.querySelectorAll(".button");
+const colorInputArr = document.querySelectorAll(".input");
+const colorElementArr = document.querySelector(".color");
 
 //generates colours on page load
 generateColors()
-
+colorInputArr.forEach((e) => {
+    //add event listener to color inputs
+    e.addEventListener("input", handleChange);
+})
+function handleChange(e){
+    let colorElement = e.target.parentElement.parentElement;
+    let colorName = colorElement.querySelector(".name");
+    colorElement.style.backgroundColor = e.target.value;
+    colorName.innerHTML = e.target.value;
+}
 lockBtnArray.forEach((element) => {
     //adds the event listener for the lock icon
     element.addEventListener("click", handleLock);
@@ -24,6 +35,7 @@ function handleLock(e){
         e.target.classList.add("fa-lock");
     }
 }
+
 
 generateBtn.addEventListener("click", generateColors);
 function howManyLocked(){
@@ -54,9 +66,11 @@ function generateColors(){
             let newColor = newColorObj[index];
             element.style.backgroundColor = newColor;
             colorName.innerHTML = newColor;
-            let rgbNewColor = hex2rgb(newColor);
+            //change value of color input
+            element.childNodes[1].childNodes[5].value = newColor;
             //check brightness of the colour and change between white
             //and black text accordingly
+            let rgbNewColor = hex2rgb(newColor);
             contrastCheck(rgbNewColor,element);
         });
     } else {
