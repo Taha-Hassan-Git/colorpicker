@@ -53,14 +53,11 @@ function generateColors(){
             const colorName = element.querySelector('.name');
             let newColor = newColorObj[index];
             element.style.backgroundColor = newColor;
-            element.style.color = "black";
             colorName.innerHTML = newColor;
             let rgbNewColor = hex2rgb(newColor);
             //check brightness of the colour and change between white
             //and black text accordingly
-            if (rgbNewColor[0]  < 100 && rgbNewColor[1]  < 100&& rgbNewColor [2] < 100){
-                element.style.color = "white";
-            }
+            contrastCheck(rgbNewColor,element);
         });
     } else {
         //Make an array of locked colours and select one at random
@@ -73,12 +70,9 @@ function generateColors(){
             const colorName = element.querySelector('.name');
             let randomColor = newColorObj[getRandomIntInclusive(1,11)];
             element.style.backgroundColor = randomColor;
-            element.style.color = "black";
             colorName.innerHTML = randomColor;
             let rgbRandomColor = hex2rgb(randomColor);
-            if (rgbRandomColor[0]  < 100 && rgbRandomColor[1]  < 100 && rgbRandomColor[2] < 140){
-                element.style.color = "white";
-            }
+            contrastCheck(rgbRandomColor, element);
         });
     }
 };
@@ -116,7 +110,15 @@ function similarColors(color) {
 }
 
 function changeBtnBg(color){
-    btnArray.forEach(e => e.style.backgroundColor = color);
+    btnArray.forEach(e => {e.style.backgroundColor = color 
+        contrastCheck(hex2rgb(color), e)});
+}
+
+function contrastCheck(color, element) {
+    element.style.color = "black";
+    if (color[0]  < 100 && color[1]  < 100&& color[2] < 100){
+        element.style.color = "white";
+    }
 }
 
 function hex2rgb(hexa){

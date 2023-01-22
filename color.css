@@ -14,7 +14,8 @@ body{
     .button{
         background-color: rgb(255, 241, 217);
         border: 0px;
-        margin: 10px;
+        margin: 0.5rem;
+        padding: 0.5rem;
     }
     .button:hover{
         border: 2px inset slategray;
