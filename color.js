@@ -1,6 +1,7 @@
 const generateBtn = document.getElementById("generate");
 const showerBtn = document.getElementById("shower");
 const lockBtnArray = document.querySelectorAll(".lock");
+const btnArray = document.querySelectorAll(".button");
 
 //generates colours on page load
 generateColors()
@@ -46,6 +47,7 @@ function generateColors(){
         //to put into the similarColors function
         var randomColor = "#" + Math.random().toString(16).substring(2, 8);
         let newColorObj = similarColors(randomColor)
+        changeBtnBg(randomColor);
         newColorObj[0] = randomColor;
         lockedUnlocked.unlockedArray.forEach((element, index) =>{
             const colorName = element.querySelector('.name');
@@ -58,7 +60,6 @@ function generateColors(){
             //and black text accordingly
             if (rgbNewColor[0]  < 100 && rgbNewColor[1]  < 100&& rgbNewColor [2] < 100){
                 element.style.color = "white";
-                console.log("Dark: " + newColor);
             }
         });
     } else {
@@ -67,6 +68,7 @@ function generateColors(){
         seedColors = []
         lockedUnlocked.lockedArray.forEach(element => seedColors.push(element.querySelector('.name').innerHTML));
         let newColorObj = similarColors(seedColors[getRandomIntInclusive(0, seedColors.length -1)]);
+        changeBtnBg(seedColors[0]);
         lockedUnlocked.unlockedArray.forEach((element) =>{
             const colorName = element.querySelector('.name');
             let randomColor = newColorObj[getRandomIntInclusive(1,11)];
@@ -111,7 +113,11 @@ function similarColors(color) {
         "11": "#" + Math.random().toString(16).substring(2, 8),
     }
     return newColorObj
-} 
+}
+
+function changeBtnBg(color){
+    btnArray.forEach(e => e.style.backgroundColor = color);
+}
 
 function hex2rgb(hexa){
     var r = parseInt(hexa.slice(1,3), 16);

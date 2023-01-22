@@ -3,18 +3,31 @@ body{
     background-color: white;
     font-family: 'Rubik', sans-serif;
 }
+
+
 .header{
     display: flex;
     justify-content: space-around;
     height: 10vh;
     width: 100%;
 }
+    .button{
+        background-color: rgb(255, 241, 217);
+        border: 0px;
+        margin: 10px;
+    }
+    .button:hover{
+        border: 2px inset slategray;
+    }
+
 .container{
     display: flex;
     flex-direction: row;
     height: 88vh;
     width: 100%;
 }
+
+
 .color{
     display: flex;
     flex-direction: column;
@@ -23,6 +36,8 @@ body{
     width: 20%;
     background-color: aqua;
 }
+
+
 .icons{
     display: flex;
     flex-direction: column;
@@ -31,12 +46,18 @@ body{
     width:50%;
     justify-self: left;
 }
+
+
 .name{
     margin-right: 35px;
 }
+
+
 .lock{
     height: 30px;
 }
+
+
 #canvas {
     position: absolute;
     z-index: 2;
