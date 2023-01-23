@@ -16,6 +16,8 @@ function handleChange(e){
     let colorName = colorElement.querySelector(".name");
     colorElement.style.backgroundColor = e.target.value;
     colorName.innerHTML = e.target.value;
+    console.log(e.target.value);
+    contrastCheck(hex2rgb(e.target.value), colorElement);
 }
 lockBtnArray.forEach((element) => {
     //adds the event listener for the lock icon
@@ -132,7 +134,7 @@ function changeBtnBg(color){
 
 function contrastCheck(color, element) {
     element.style.color = "black";
-    if (color[0]  < 100 && color[1]  < 100&& color[2] < 100){
+    if (color[0]  < 100 && color[1]  < 100&& color[2] < 120){
         element.style.color = "white";
     }
 }
