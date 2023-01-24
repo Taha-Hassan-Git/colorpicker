@@ -13,13 +13,23 @@ body{
     width: 100%;
 }
     .button{
-        background-color: rgb(255, 241, 217);
-        border: 0px;
-        margin: 0.5rem;
-        padding: 0.5rem;
-    }
+        max-height: 2.75rem;
+        background: transparent;
+        border: none;
+        margin: 0rem;
+        border-radius: 4%;
+        padding: 0.75rem 1.25rem;
+        border: 0px solid black;
+        transition-duration: 400ms;
+        cursor: pointer;
+        opacity: 0.9;
+        -webkit-border-radius: 4%;
+        -moz-border-radius: 4%;
+        -ms-border-radius: 4%;
+        -o-border-radius: 4%;
+}
     .button:hover{
-        border: 2px inset slategray;
+        opacity: 1;
     }
 
 .container{
@@ -37,6 +47,7 @@ body{
     align-items: center;
     width: 20%;
     background-color: aqua;
+    transition-duration: 300ms;
 }
 
 
