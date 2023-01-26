@@ -90,7 +90,7 @@ function generateColors(){
             element.style.backgroundColor = randomColor;
             colorName.innerHTML = randomColor;
             //change value of color input
-            element.childNodes[1].childNodes[5].value = randomColor;
+            element.childNodes[3].childNodes[1].value = randomColor;
             let rgbRandomColor = hex2rgb(randomColor);
             contrastCheck(rgbRandomColor, element);
         });
