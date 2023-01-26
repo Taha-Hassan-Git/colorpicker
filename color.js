@@ -13,6 +13,7 @@ colorInputArr.forEach((e) => {
 })
 function handleChange(e){
     let colorElement = e.target.parentElement.parentElement;
+    console.log(colorElement);
     let colorName = colorElement.querySelector(".name");
     colorElement.style.backgroundColor = e.target.value;
     colorName.innerHTML = e.target.value;
@@ -69,7 +70,8 @@ function generateColors(){
             element.style.backgroundColor = newColor;
             colorName.innerHTML = newColor;
             //change value of color input
-            element.childNodes[1].childNodes[5].value = newColor;
+            console.log(element.childNodes);
+            element.childNodes[3].childNodes[1].value = newColor;
             //check brightness of the colour and change between white
             //and black text accordingly
             let rgbNewColor = hex2rgb(newColor);
