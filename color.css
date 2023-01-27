@@ -35,6 +35,7 @@ body{
         opacity: 1;
     }
 
+
 .container{
     display: flex;
     flex-direction: row;
@@ -62,6 +63,13 @@ body{
     -moz-border-radius: 1%;
     -ms-border-radius: 1%;
     -o-border-radius: 1%;
+} 
+.color:hover{
+    transform:scale(100.5%);
+    -webkit-transform:scale(100.5%);
+    -moz-transform:scale(100.5%);
+    -ms-transform:scale(100.5%);
+    -o-transform:scale(100.5%);
 }
 
 
