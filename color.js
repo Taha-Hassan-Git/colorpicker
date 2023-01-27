@@ -13,11 +13,9 @@ colorInputArr.forEach((e) => {
 })
 function handleChange(e){
     let colorElement = e.target.parentElement.parentElement;
-    console.log(colorElement);
     let colorName = colorElement.querySelector(".name");
     colorElement.style.backgroundColor = e.target.value;
     colorName.innerHTML = e.target.value;
-    console.log(e.target.value);
     contrastCheck(hex2rgb(e.target.value), colorElement);
 }
 lockBtnArray.forEach((element) => {
@@ -70,7 +68,6 @@ function generateColors(){
             element.style.backgroundColor = newColor;
             colorName.innerHTML = newColor;
             //change value of color input
-            console.log(element.childNodes);
             element.childNodes[3].childNodes[1].value = newColor;
             //check brightness of the colour and change between white
             //and black text accordingly
@@ -138,6 +135,8 @@ function contrastCheck(color, element) {
     element.style.color = "black";
     if (color[0]  < 100 && color[1]  < 100&& color[2] < 120){
         element.style.color = "white";
+        console.log(element);
+        element.childNodes[3].childNodes[1].style.boxShadow = "3px 3px 29px -4px rgba(179,179,179,0.20)";
     }
 }
 

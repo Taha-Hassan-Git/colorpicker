@@ -117,6 +117,7 @@ body{
     -webkit-box-shadow: 2px 9px 23px -8px rgba(0,0,0,0.55);
     -moz-box-shadow: 2px 9px 23px -8px rgba(0,0,0,0.55);
     box-shadow: 2px 9px 23px -8px rgba(0,0,0,0.55);
+    
 }
 input[type="color"]::-webkit-color-swatch {
     border: none;
