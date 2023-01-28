@@ -53,26 +53,24 @@ function howManyLocked(){
     return {"lockedArray": lockedArray, "unlockedArray": unlockedArray}
 }
 function generateColors(){
-    //find how many are locked
+    //find if any are locked
     var lockedUnlocked = howManyLocked();
     if (lockedUnlocked.lockedArray.length == 0){
         //If there are no locked elements then generate a random colour
         //to put into the similarColors function
         var randomColor = "#" + Math.random().toString(16).substring(2, 8);
         let newColorObj = similarColors(randomColor)
+        //new bg for generate btn
         changeBtnBg(randomColor);
+        //put random color into the obj
         newColorObj[0] = randomColor;
+        //iterate through the unlocked elements and change their bg color
+        //and names etc.
         lockedUnlocked.unlockedArray.forEach((element, index) =>{
-            const colorName = element.querySelector('.name');
-            let newColor = newColorObj[index];
-            element.style.backgroundColor = newColor;
-            colorName.innerHTML = newColor;
-            //change value of color input
-            element.childNodes[3].childNodes[1].value = newColor;
-            //check brightness of the colour and change between white
-            //and black text accordingly
-            let rgbNewColor = hex2rgb(newColor);
-            contrastCheck(rgbNewColor,element);
+            fillColors({"element": element,
+                        "index": index,
+                        "newColorObj": newColorObj,
+                        "locked": false});
         });
     } else {
         //Make an array of locked colours and select one at random
@@ -80,18 +78,32 @@ function generateColors(){
         seedColors = []
         lockedUnlocked.lockedArray.forEach(element => seedColors.push(element.querySelector('.name').innerHTML));
         let newColorObj = similarColors(seedColors[getRandomIntInclusive(0, seedColors.length -1)]);
+        //choose the first color in the locked array to be the new btn color
         changeBtnBg(seedColors[0]);
-        lockedUnlocked.unlockedArray.forEach((element) =>{
-            const colorName = element.querySelector('.name');
-            let randomColor = newColorObj[getRandomIntInclusive(1,11)];
-            element.style.backgroundColor = randomColor;
-            colorName.innerHTML = randomColor;
-            //change value of color input
-            element.childNodes[3].childNodes[1].value = randomColor;
-            let rgbRandomColor = hex2rgb(randomColor);
-            contrastCheck(rgbRandomColor, element);
+        lockedUnlocked.unlockedArray.forEach((element, index) =>{
+            fillColors({"element": element,
+                        "index": index,
+                        "newColorObj": newColorObj,
+                        "locked": true});
         });
     }
+    function fillColors(arg){
+        const colorName = arg.element.querySelector('.name');
+        let newColor = ""
+            if (!arg.locked){
+                newColor = arg.newColorObj[arg.index];
+            }   else {
+                newColor = arg.newColorObj[getRandomIntInclusive(1,11)];
+            }
+            arg.element.style.backgroundColor = newColor;
+            colorName.innerHTML = newColor;
+            //change value of color input
+            arg.element.childNodes[3].childNodes[1].value = newColor;
+            //check brightness of the colour and change between white
+            //and black text accordingly
+            let rgbNewColor = hex2rgb(newColor);
+            contrastCheck(rgbNewColor,arg.element);
+        }
 };
 
 function similarColors(color) {
