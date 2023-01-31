@@ -64,12 +64,12 @@ body{
     -ms-border-radius: 1%;
     -o-border-radius: 1%;
 } 
-.color:hover{
-    transform:scale(100.5%);
-    -webkit-transform:scale(100.5%);
-    -moz-transform:scale(100.5%);
-    -ms-transform:scale(100.5%);
-    -o-transform:scale(100.5%);
+    .color:hover{
+        transform:scale(101%);
+        -webkit-transform:scale(101%);
+        -moz-transform:scale(101%);
+        -ms-transform:scale(101%);
+        -o-transform:scale(101%);
 }
 
 

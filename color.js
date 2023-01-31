@@ -58,7 +58,7 @@ function generateColors(){
     if (lockedUnlocked.lockedArray.length == 0){
         //If there are no locked elements then generate a random colour
         //to put into the similarColors function
-        var randomColor = "#" + Math.random().toString(16).substring(2, 8);
+        const randomColor = "#" + Math.random().toString(16).substring(2, 8);
         let newColorObj = similarColors(randomColor)
         changeBtnBg(randomColor);
         newColorObj[0] = randomColor;
@@ -68,7 +68,8 @@ function generateColors(){
             element.style.backgroundColor = newColor;
             colorName.innerHTML = newColor;
             //change value of color input
-            element.childNodes[3].childNodes[1].value = newColor;
+            const colorInput = element.childNodes[3].childNodes[1];
+            colorInput.value = newColor;
             //check brightness of the colour and change between white
             //and black text accordingly
             let rgbNewColor = hex2rgb(newColor);
@@ -127,16 +128,18 @@ function similarColors(color) {
 }
 
 function changeBtnBg(color){
-    btnArray.forEach(e => {e.style.backgroundColor = color 
-        contrastCheck(hex2rgb(color), e)});
+    generateBtn.style.backgroundColor = color 
+    contrastCheck(hex2rgb(color), generateBtn);
 }
 
 function contrastCheck(color, element) {
     element.style.color = "black";
     if (color[0]  < 100 && color[1]  < 100&& color[2] < 120){
         element.style.color = "white";
-        console.log(element);
-        element.childNodes[3].childNodes[1].style.boxShadow = "3px 3px 29px -4px rgba(179,179,179,0.20)";
+        if (element.tagName == 'DIV'){
+            element.childNodes[3].childNodes[1].style.boxShadow = "3px 3px 29px -4px rgba(179,179,179,0.20)";
+        }
+        
     }
 }
 
