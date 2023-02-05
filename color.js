@@ -62,18 +62,8 @@ function generateColors(){
         let newColorObj = similarColors(randomColor)
         changeBtnBg(randomColor);
         newColorObj[0] = randomColor;
-        lockedUnlocked.unlockedArray.forEach((element, index) =>{
-            const colorName = element.querySelector('.name');
-            let newColor = newColorObj[index];
-            element.style.backgroundColor = newColor;
-            colorName.innerHTML = newColor;
-            //change value of color input
-            const colorInput = element.childNodes[3].childNodes[1];
-            colorInput.value = newColor;
-            //check brightness of the colour and change between white
-            //and black text accordingly
-            let rgbNewColor = hex2rgb(newColor);
-            contrastCheck(rgbNewColor,element);
+        lockedUnlocked.unlockedArray.forEach((element, index)=>{
+            updateColors(element, newColorObj[index]);
         });
     } else {
         //Make an array of locked colours and select one at random
@@ -83,17 +73,20 @@ function generateColors(){
         let newColorObj = similarColors(seedColors[getRandomIntInclusive(0, seedColors.length -1)]);
         changeBtnBg(seedColors[0]);
         lockedUnlocked.unlockedArray.forEach((element) =>{
-            const colorName = element.querySelector('.name');
-            let randomColor = newColorObj[getRandomIntInclusive(1,11)];
-            element.style.backgroundColor = randomColor;
-            colorName.innerHTML = randomColor;
-            //change value of color input
-            element.childNodes[3].childNodes[1].value = randomColor;
-            let rgbRandomColor = hex2rgb(randomColor);
-            contrastCheck(rgbRandomColor, element);
+            updateColors(element, newColorObj[getRandomIntInclusive(1,11)]);
         });
     }
 };
+
+function updateColors(element, color){
+        const colorInput = element.querySelector('.input');
+        const colorName = element.querySelector('.name');
+        colorName.innerHTML = color;
+        element.style.backgroundColor = color;
+        colorInput.value = color;
+        let rgbColor = hex2rgb(color);
+        contrastCheck(rgbColor,element);
+}
 
 function similarColors(color) {
     // Convert the input color to RGB
@@ -139,7 +132,6 @@ function contrastCheck(color, element) {
         if (element.tagName == 'DIV'){
             element.childNodes[3].childNodes[1].style.boxShadow = "3px 3px 29px -4px rgba(179,179,179,0.20)";
         }
-        
     }
 }
 
