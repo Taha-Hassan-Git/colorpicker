@@ -4,6 +4,7 @@ const lockBtnArray = document.querySelectorAll(".lock");
 const btnArray = document.querySelectorAll(".button");
 const colorInputArr = document.querySelectorAll(".input");
 const colorElementArr = document.querySelector(".color");
+const copyArr = document.querySelectorAll(".copy");
 
 //generates colours on page load
 generateColors()
@@ -83,6 +84,7 @@ function updateColors(element, color){
         const colorName = element.querySelector('.name');
         colorName.innerHTML = color;
         element.style.backgroundColor = color;
+        element.id = color;
         colorInput.value = color;
         let rgbColor = hex2rgb(color);
         contrastCheck(rgbColor,element);
@@ -161,3 +163,18 @@ function normalise(value){
     return value
 }
 
+copyArr.forEach((arr)=>{
+    arr.addEventListener("click",copyColor);
+});
+
+function copyColor(e) {
+    // Get the text field
+    const copyText = e.target.parentElement.parentElement.id;
+    console.log(copyText);
+  
+     // Copy the text inside the text field
+    navigator.clipboard.writeText(copyText);
+  
+    // Alert the copied text
+    alert("Copied the text: " + copyText);
+  }
