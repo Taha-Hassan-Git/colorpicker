@@ -5,6 +5,7 @@ const btnArray = document.querySelectorAll(".button");
 const colorInputArr = document.querySelectorAll(".input");
 const colorElementArr = document.querySelector(".color");
 const copyArr = document.querySelectorAll(".copy");
+const previousColors = []
 
 //generates colours on page load
 generateColors()
@@ -55,7 +56,7 @@ function howManyLocked(){
 }
 function generateColors(){
     //find how many are locked
-    var lockedUnlocked = howManyLocked();
+    let lockedUnlocked = howManyLocked();
     if (lockedUnlocked.lockedArray.length == 0){
         //If there are no locked elements then generate a random colour
         //to put into the similarColors function
@@ -63,6 +64,7 @@ function generateColors(){
         let newColorObj = similarColors(randomColor)
         changeBtnBg(randomColor);
         newColorObj[0] = randomColor;
+        recordColors(lockedUnlocked.unlockedArray);
         lockedUnlocked.unlockedArray.forEach((element, index)=>{
             updateColors(element, newColorObj[index]);
         });
@@ -78,6 +80,19 @@ function generateColors(){
         });
     }
 };
+
+function recordColors(array){
+    console.log(array);
+    previousColors.push(array);
+    console.log(previousColors);
+}
+
+document.getElementById("back").addEventListener("click",(e)=> {
+    console.log(previousColors);
+    previousColors.colors.pop().forEach((element) =>{
+        updateColors(element, element.id);
+    });
+});
 
 function updateColors(element, color){
         const colorInput = element.querySelector('.input');
@@ -171,10 +186,8 @@ function copyColor(e) {
     // Get the text field
     const copyText = e.target.parentElement.parentElement.id;
     console.log(copyText);
-  
-     // Copy the text inside the text field
+     // Copy the text
     navigator.clipboard.writeText(copyText);
-  
     // Alert the copied text
     alert("Copied the text: " + copyText);
   }
