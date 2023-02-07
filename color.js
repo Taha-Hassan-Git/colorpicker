@@ -3,9 +3,8 @@ const showerBtn = document.getElementById("shower");
 const lockBtnArray = document.querySelectorAll(".lock");
 const btnArray = document.querySelectorAll(".button");
 const colorInputArr = document.querySelectorAll(".input");
-const colorElementArr = document.querySelector(".color");
 const copyArr = document.querySelectorAll(".copy");
-const previousColors = []
+let previousColors = []
 
 //generates colours on page load
 generateColors()
@@ -64,7 +63,12 @@ function generateColors(){
         let newColorObj = similarColors(randomColor)
         changeBtnBg(randomColor);
         newColorObj[0] = randomColor;
-        recordColors(lockedUnlocked.unlockedArray);
+        setTimeout(() => {
+            let arr = [];
+            lockedUnlocked.unlockedArray.forEach((element) => arr.push(element.id));
+            
+            previousColors.push(arr);
+          }, 0);
         lockedUnlocked.unlockedArray.forEach((element, index)=>{
             updateColors(element, newColorObj[index]);
         });
@@ -81,16 +85,14 @@ function generateColors(){
     }
 };
 
-function recordColors(array){
-    console.log(array);
-    previousColors.push(array);
-    console.log(previousColors);
-}
 
 document.getElementById("back").addEventListener("click",(e)=> {
-    console.log(previousColors);
-    previousColors.colors.pop().forEach((element) =>{
-        updateColors(element, element.id);
+    previousColors.pop();
+    let arr = previousColors.slice(-1).flat();
+    console.log(arr);
+    elements = document.querySelectorAll(".color")
+    document.querySelectorAll('.color').forEach((element, index) =>{
+        updateColors(element, arr[index])
     });
 });
 
@@ -185,7 +187,6 @@ copyArr.forEach((arr)=>{
 function copyColor(e) {
     // Get the text field
     const copyText = e.target.parentElement.parentElement.id;
-    console.log(copyText);
      // Copy the text
     navigator.clipboard.writeText(copyText);
     // Alert the copied text
