@@ -89,8 +89,6 @@ function generateColors(){
 document.getElementById("back").addEventListener("click",(e)=> {
     previousColors.pop();
     let arr = previousColors.slice(-1).flat();
-    console.log(arr);
-    elements = document.querySelectorAll(".color")
     document.querySelectorAll('.color').forEach((element, index) =>{
         updateColors(element, arr[index])
     });
@@ -140,8 +138,10 @@ function similarColors(color) {
 }
 
 function changeBtnBg(color){
-    generateBtn.style.backgroundColor = color 
-    contrastCheck(hex2rgb(color), generateBtn);
+    btnArray.forEach((btn)=>{
+        btn.style.backgroundColor = color; 
+        contrastCheck(hex2rgb(color), btn);
+    });
 }
 
 function contrastCheck(color, element) {
@@ -190,5 +190,5 @@ function copyColor(e) {
      // Copy the text
     navigator.clipboard.writeText(copyText);
     // Alert the copied text
-    alert("Copied the text: " + copyText);
+    alert("Copied colour! " + copyText);
   }

@@ -3,6 +3,7 @@ body{
     background-color: white;
     font-family: 'Rubik', sans-serif;
     box-sizing: border-box;
+    margin: 0;
 }
 
 
@@ -39,6 +40,8 @@ body{
 .container{
     display: flex;
     flex-direction: row;
+    margin-left: auto;
+    margin-right: auto;
     height: 88vh;
     width: 100vw;
     -webkit-box-shadow: 2px 9px 23px -8px rgba(0,0,0,0.55);
