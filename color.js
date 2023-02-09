@@ -8,6 +8,16 @@ let previousColors = []
 
 //generates colours on page load
 generateColors()
+
+document.addEventListener("keydown", function(event) {
+  if (event.code === "Space" || event.code === "ArrowRight") {
+    generateColors();
+  }
+  if (event.code === "ArrowLeft"){
+    backButton();
+  }
+});
+
 colorInputArr.forEach((e) => {
     //add event listener to color inputs
     e.addEventListener("input", handleChange);
@@ -19,6 +29,9 @@ function handleChange(e){
     colorName.innerHTML = e.target.value;
     contrastCheck(hex2rgb(e.target.value), colorElement);
 }
+
+
+
 lockBtnArray.forEach((element) => {
     //adds the event listener for the lock icon
     element.addEventListener("click", handleLock);
@@ -86,13 +99,16 @@ function generateColors(){
 };
 
 
-document.getElementById("back").addEventListener("click",(e)=> {
+document.getElementById("back").addEventListener("click", backButton);
+
+function backButton(){
     previousColors.pop();
     let arr = previousColors.slice(-1).flat();
     document.querySelectorAll('.color').forEach((element, index) =>{
         updateColors(element, arr[index])
     });
-});
+}
+    
 
 function updateColors(element, color){
         const colorInput = element.querySelector('.input');
