@@ -9,7 +9,8 @@ let previousColors = []
 //generates colours on page load
 generateColors()
 
-document.addEventListener("keydown", function(event) {
+
+document.addEventListener("keyup", function(event) {
   if (event.code === "Space" || event.code === "ArrowRight") {
     generateColors();
   }
@@ -154,6 +155,13 @@ function similarColors(color) {
 }
 
 function changeBtnBg(color){
+    let arr = [];
+    let divArray =  document.querySelectorAll(".color");
+    divArray.forEach(e => arr.push(e.classList.contains("locked")));
+    console.log(arr);
+    if (arr.includes(true)){
+        console.log(divArray);
+    }
     btnArray.forEach((btn)=>{
         btn.style.backgroundColor = color; 
         contrastCheck(hex2rgb(color), btn);
