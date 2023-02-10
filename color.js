@@ -6,17 +6,18 @@ const colorInputArr = document.querySelectorAll(".input");
 const copyArr = document.querySelectorAll(".copy");
 let previousColors = []
 
-//generateColors is the function that runs on load and 
-//whenever the user presses the spacebar/right arrow key or clicks
-//the generate btn. It's the main engine of the program.
+//  generateColors is the function that runs on load and 
+//  whenever the user presses the spacebar/right arrow key or clicks
+//  the generate btn. It's the main engine of the program.
 //
 // Helper functions: 
-//                   howManyLocked   || checks which divs are locked
-//                   similarColors   || returns an object of similar colors from a seed color
-//                   changeBtnBg     || updates the btn color
-//                   updateColors    || changes the appearance of the divs to match the generated colors
-//                   hex2Rgb/rgbtohex|| translate color values between the two standards
-//  
+//                   howManyLocked         || checks which divs are locked
+//                   similarColors         || returns an object of similar colors from a seed color
+//                   changeBtnBg           || updates the btn color
+//                   updateColors          || changes the appearance of the divs to match the generated colors
+//                   hex2Rgb/rgbtohex      || translate color values between the two standards
+//                   getRandomIntInclusive || generates random ints
+//                   normalise             || brings rgb values back to min and max levels
 
 function generateColors(){
     //find how many are locked
@@ -49,6 +50,8 @@ function generateColors(){
         });
     }
 };
+
+
 
 function similarColors(color) {
     // Convert the input color to RGB
@@ -100,55 +103,20 @@ function similarColors(color) {
         newColorObj = {
             //left blank for generateColors function to add the seed colour
             0: '',
-            //lighter/darker shades of seed colour
+            // Complemeentary and tertiary colors
             1: rgbToHex(b , r, g),
             2: rgbToHex(255-r, g, b),
             3: rgbToHex(r, 255-g, b),
             4: rgbToHex(r, g, 255-b),
-            //inverted values, complementary colour and shades of it
-            5: rgbToHex(normalise(b+20), normalise(r+20), normalise(g+20)),
-            6: rgbToHex(normalise(b+20), normalise(r+20), normalise(g+20)),
-            7: rgbToHex(normalise(b-20), normalise(r-20), normalise(g-20)),
-            8: rgbToHex(normalise(b+40), normalise(r+40), normalise(g+40)),
-            9: rgbToHex(normalise(b-40), normalise(r-40), normalise(g-40)),
-            10: rgbToHex(normalise(b+50), normalise(r+50), normalise(g+50)),
-            11: rgbToHex(normalise(b-50), normalise(r-50), normalise(g-50)),
-            //Tertiary colours, one value inverted, and shades of them
-            12: rgbToHex(normalise(b+20), normalise(r+20), normalise(g+20)),
-            13: rgbToHex(normalise((255-r)+20), normalise(g+20), normalise(b+20)),
-            14: rgbToHex(normalise((255-r)-20), normalise(g-20), normalise(b-20)),
-            15: rgbToHex(normalise(b+20), normalise(r+20), normalise(g+20)),
-            16: rgbToHex(normalise(r-20), normalise((255-g)-20), normalise(b-20)),
-            17: rgbToHex(normalise(r+20), normalise((255-g)+20), normalise(b+20)),
-            18: rgbToHex(normalise(b+20), normalise(r+20), normalise(g+20)),
-            19: rgbToHex(normalise(r-20), normalise(g-20), normalise((255-b)-20)),
-            20: rgbToHex(normalise(r+20), normalise(g+20), normalise((255-b)+20)),
-            //random colours
-            21: "#" + Math.random().toString(16).substring(2, 8),
-            22: "#" + Math.random().toString(16).substring(2, 8),
-            23: "#" + Math.random().toString(16).substring(2, 8),
         }
     }
     
     return newColorObj
 }
 
-//generates colours on page load
-generateColors()
 
-document.addEventListener("keyup", function(event) {
-  if (event.code === "Space" || event.code === "ArrowRight") {
-    generateColors();
-  }
-  if (event.code === "ArrowLeft"){
-    backButton();
-  }
-});
 
-colorInputArr.forEach((e) => {
-    //add event listener to color inputs
-    e.addEventListener("input", handleChange);
-})
+
 function handleChange(e){
     let colorElement = e.target.parentElement.parentElement;
     let colorName = colorElement.querySelector(".name");
@@ -159,10 +127,6 @@ function handleChange(e){
 
 
 
-lockBtnArray.forEach((element) => {
-    //adds the event listener for the lock icon
-    element.addEventListener("click", handleLock);
-})
 function handleLock(e){
     //when lock icon is clicked it toggles the classname "locked"
     //and changes the lock icon
@@ -179,7 +143,6 @@ function handleLock(e){
 }
 
 
-generateBtn.addEventListener("click", generateColors);
 function howManyLocked(){
     //checks how many colour elements are locked/unlocked
     //returns an object with two arrays of locked/unlocked elements
@@ -194,17 +157,6 @@ function howManyLocked(){
     return {"lockedArray": lockedArray, "unlockedArray": unlockedArray}
 }
 
-
-
-document.getElementById("back").addEventListener("click", backButton);
-
-function backButton(){
-    previousColors.pop();
-    let arr = previousColors.slice(-1).flat();
-    document.querySelectorAll('.color').forEach((element, index) =>{
-        updateColors(element, arr[index])
-    });
-}
     
 
 function updateColors(element, color){
@@ -243,6 +195,71 @@ function contrastCheck(color, element) {
     }
 }
 
+
+
+
+
+//      ||||    EVENT LISTENERS        ||||
+
+
+generateBtn.addEventListener("click", generateColors);
+
+
+lockBtnArray.forEach((element) => {
+    //adds the event listener for the lock icon
+    element.addEventListener("click", handleLock);
+})
+
+
+colorInputArr.forEach((e) => {
+    //add event listener to color inputs
+    e.addEventListener("input", handleChange);
+})
+
+
+document.getElementById("back").addEventListener("click", backButton);
+
+function backButton(){
+    previousColors.pop();
+    let arr = previousColors.slice(-1).flat();
+    document.querySelectorAll('.color').forEach((element, index) =>{
+        updateColors(element, arr[index])
+    });
+}
+
+
+
+document.addEventListener("keyup", function(event) {
+    //keyboard functionality
+    if (event.code === "Space" || event.code === "ArrowRight") {
+      generateColors();
+    }
+    if (event.code === "ArrowLeft"){
+      backButton();
+    }
+  });
+
+
+  
+copyArr.forEach((arr)=>{
+      arr.addEventListener("click",copyColor);
+  });
+function copyColor(e) {
+    // Get the text field
+    const copyText = e.target.parentElement.parentElement.id;
+     // Copy the text
+    navigator.clipboard.writeText(copyText);
+    // Alert the copied text
+    alert("Copied colour! " + copyText);
+}
+
+
+
+
+
+//      ||||      HELPER FUNCTIONS  ||||
+
+
 function hex2rgb(hexa){
     var r = parseInt(hexa.slice(1,3), 16);
         g = parseInt(hexa.slice(3,5), 16);
@@ -269,15 +286,8 @@ function normalise(value){
     return value
 }
 
-copyArr.forEach((arr)=>{
-    arr.addEventListener("click",copyColor);
-});
 
-function copyColor(e) {
-    // Get the text field
-    const copyText = e.target.parentElement.parentElement.id;
-     // Copy the text
-    navigator.clipboard.writeText(copyText);
-    // Alert the copied text
-    alert("Copied colour! " + copyText);
-  }
+//          GENERTE COLORS ON PAGE LOAD
+
+
+generateColors()
