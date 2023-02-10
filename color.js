@@ -6,9 +6,135 @@ const colorInputArr = document.querySelectorAll(".input");
 const copyArr = document.querySelectorAll(".copy");
 let previousColors = []
 
+//generateColors is the function that runs on load and 
+//whenever the user presses the spacebar/right arrow key or clicks
+//the generate btn. It's the main engine of the program.
+//
+// Helper functions: 
+//                   howManyLocked   || checks which divs are locked
+//                   similarColors   || returns an object of similar colors from a seed color
+//                   changeBtnBg     || updates the btn color
+//                   updateColors    || changes the appearance of the divs to match the generated colors
+//                   hex2Rgb/rgbtohex|| translate color values between the two standards
+//  
+
+function generateColors(){
+    //find how many are locked
+    let lockedUnlocked = howManyLocked();
+    if (lockedUnlocked.lockedArray.length == 0){
+        //If there are no locked elements then generate a random colour
+        //to put into the similarColors function
+        const randomColor = "#" + Math.random().toString(16).substring(2, 8);
+        let newColorObj = similarColors({color: randomColor,locked: false });
+        changeBtnBg(randomColor);
+        newColorObj[0] = randomColor;
+        setTimeout(() => {
+            let arr = [];
+            lockedUnlocked.unlockedArray.forEach((element) => arr.push(element.id));
+            
+            previousColors.push(arr);
+          }, 0);
+        lockedUnlocked.unlockedArray.forEach((element, index)=>{
+            updateColors(element, newColorObj[index]);
+        });
+    } else {
+        //Make an array of locked colours and select one at random
+        //to feed into similarcolors function
+        seedColors = []
+        lockedUnlocked.lockedArray.forEach(element => seedColors.push(element.querySelector('.name').innerHTML));
+        let newColorObj = similarColors({color: seedColors[getRandomIntInclusive(0, seedColors.length -1)], locked: true});
+        changeBtnBg(seedColors[0]);
+        lockedUnlocked.unlockedArray.forEach((element) =>{
+            updateColors(element, newColorObj[getRandomIntInclusive(1,23)]);
+        });
+    }
+};
+
+function similarColors(color) {
+    // Convert the input color to RGB
+    let rgb = hex2rgb(color.color);
+    let r = rgb[0];
+    let g = rgb[1];
+    let b = rgb[2];
+    let newColorObj = {}
+    //generate an object of similar colours, 
+
+    //              Complementary colours || invert the rgb values
+    //              tertiary colours      || invert just one of the three values.
+
+    //The object also generates darker and lighter shades of these similar colours
+    //as well as the original colour, and 3 completely random colours.
+    if (color.locked){
+        newColorObj = {
+            //left blank for generateColors function to add the seed colour
+            0: '',
+            //lighter/darker shades of seed colour
+            1: rgbToHex(normalise(r+30), normalise(g+30), normalise(b+30)),
+            2: rgbToHex(normalise(r-30), normalise(g-30), normalise(b-30)),
+            3: rgbToHex(normalise(r+60), normalise(g+60), normalise(b+60)),
+            4: rgbToHex(normalise(r-60), normalise(g-60), normalise(b-60)),
+            //inverted values, complementary colour and shades of it
+            5: rgbToHex(b , r, g),
+            6: rgbToHex(normalise(b+20), normalise(r+20), normalise(g+20)),
+            7: rgbToHex(normalise(b-20), normalise(r-20), normalise(g-20)),
+            8: rgbToHex(normalise(b+40), normalise(r+40), normalise(g+40)),
+            9: rgbToHex(normalise(b-40), normalise(r-40), normalise(g-40)),
+            10: rgbToHex(normalise(b+50), normalise(r+50), normalise(g+50)),
+            11: rgbToHex(normalise(b-50), normalise(r-50), normalise(g-50)),
+            //Tertiary colours, one value inverted, and shades of them
+            12: rgbToHex(255-r, g, b),
+            13: rgbToHex(normalise((255-r)+20), normalise(g+20), normalise(b+20)),
+            14: rgbToHex(normalise((255-r)-20), normalise(g-20), normalise(b-20)),
+            15: rgbToHex(r, 255-g, b),
+            16: rgbToHex(normalise(r-20), normalise((255-g)-20), normalise(b-20)),
+            17: rgbToHex(normalise(r+20), normalise((255-g)+20), normalise(b+20)),
+            18: rgbToHex(r, g, 255-b),
+            19: rgbToHex(normalise(r-20), normalise(g-20), normalise((255-b)-20)),
+            20: rgbToHex(normalise(r+20), normalise(g+20), normalise((255-b)+20)),
+            //random colours
+            21: "#" + Math.random().toString(16).substring(2, 8),
+            22: "#" + Math.random().toString(16).substring(2, 8),
+            23: "#" + Math.random().toString(16).substring(2, 8),
+        }
+    } else {
+        newColorObj = {
+            //left blank for generateColors function to add the seed colour
+            0: '',
+            //lighter/darker shades of seed colour
+            1: rgbToHex(b , r, g),
+            2: rgbToHex(255-r, g, b),
+            3: rgbToHex(r, 255-g, b),
+            4: rgbToHex(r, g, 255-b),
+            //inverted values, complementary colour and shades of it
+            5: rgbToHex(normalise(b+20), normalise(r+20), normalise(g+20)),
+            6: rgbToHex(normalise(b+20), normalise(r+20), normalise(g+20)),
+            7: rgbToHex(normalise(b-20), normalise(r-20), normalise(g-20)),
+            8: rgbToHex(normalise(b+40), normalise(r+40), normalise(g+40)),
+            9: rgbToHex(normalise(b-40), normalise(r-40), normalise(g-40)),
+            10: rgbToHex(normalise(b+50), normalise(r+50), normalise(g+50)),
+            11: rgbToHex(normalise(b-50), normalise(r-50), normalise(g-50)),
+            //Tertiary colours, one value inverted, and shades of them
+            12: rgbToHex(normalise(b+20), normalise(r+20), normalise(g+20)),
+            13: rgbToHex(normalise((255-r)+20), normalise(g+20), normalise(b+20)),
+            14: rgbToHex(normalise((255-r)-20), normalise(g-20), normalise(b-20)),
+            15: rgbToHex(normalise(b+20), normalise(r+20), normalise(g+20)),
+            16: rgbToHex(normalise(r-20), normalise((255-g)-20), normalise(b-20)),
+            17: rgbToHex(normalise(r+20), normalise((255-g)+20), normalise(b+20)),
+            18: rgbToHex(normalise(b+20), normalise(r+20), normalise(g+20)),
+            19: rgbToHex(normalise(r-20), normalise(g-20), normalise((255-b)-20)),
+            20: rgbToHex(normalise(r+20), normalise(g+20), normalise((255-b)+20)),
+            //random colours
+            21: "#" + Math.random().toString(16).substring(2, 8),
+            22: "#" + Math.random().toString(16).substring(2, 8),
+            23: "#" + Math.random().toString(16).substring(2, 8),
+        }
+    }
+    
+    return newColorObj
+}
+
 //generates colours on page load
 generateColors()
-
 
 document.addEventListener("keyup", function(event) {
   if (event.code === "Space" || event.code === "ArrowRight") {
@@ -67,37 +193,7 @@ function howManyLocked(){
     }});
     return {"lockedArray": lockedArray, "unlockedArray": unlockedArray}
 }
-function generateColors(){
-    //find how many are locked
-    let lockedUnlocked = howManyLocked();
-    if (lockedUnlocked.lockedArray.length == 0){
-        //If there are no locked elements then generate a random colour
-        //to put into the similarColors function
-        const randomColor = "#" + Math.random().toString(16).substring(2, 8);
-        let newColorObj = similarColors(randomColor)
-        changeBtnBg(randomColor);
-        newColorObj[0] = randomColor;
-        setTimeout(() => {
-            let arr = [];
-            lockedUnlocked.unlockedArray.forEach((element) => arr.push(element.id));
-            
-            previousColors.push(arr);
-          }, 0);
-        lockedUnlocked.unlockedArray.forEach((element, index)=>{
-            updateColors(element, newColorObj[index]);
-        });
-    } else {
-        //Make an array of locked colours and select one at random
-        //to feed into similarcolors function
-        seedColors = []
-        lockedUnlocked.lockedArray.forEach(element => seedColors.push(element.querySelector('.name').innerHTML));
-        let newColorObj = similarColors(seedColors[getRandomIntInclusive(0, seedColors.length -1)]);
-        changeBtnBg(seedColors[0]);
-        lockedUnlocked.unlockedArray.forEach((element) =>{
-            updateColors(element, newColorObj[getRandomIntInclusive(1,11)]);
-        });
-    }
-};
+
 
 
 document.getElementById("back").addEventListener("click", backButton);
@@ -122,45 +218,14 @@ function updateColors(element, color){
         contrastCheck(rgbColor,element);
 }
 
-function similarColors(color) {
-    // Convert the input color to RGB
-    let rgb = hex2rgb(color);
-    let r = rgb[0];
-    let g = rgb[1];
-    let b = rgb[2];
-    //generate an object of similar colours, complementary colours invert the 
-    //rgb values, and tertiary colours invert just one of the three values.
-    //The object also generates darker and lighter shades of these similar colours
-    //as well as the original colour, and 3 completely random colours.
-    var newColorObj = {
-        //left blank for generateColors function to add the seed colour
-        "0": '',
-        //lighter/darker shades of seed colour
-        "1": rgbToHex(normalise(r+60), normalise(g+60), normalise(b+60)),
-        "2": rgbToHex(normalise(r-60), normalise(g-60), normalise(b-60)),
-        //inverted values, complementary colour and shades of it
-        "3": rgbToHex(b , r, g),
-        "4": rgbToHex(normalise(b+60), normalise(r+60), normalise(g+60)),
-        "5": rgbToHex(normalise(b-60), normalise(r-60), normalise(g-60)),
-        //Tertiary colours, one value inverted
-        "6": rgbToHex(255-r, g, b),
-        "7": rgbToHex(r, 255-g, b),
-        "8": rgbToHex(r, g, 255-b),
-        //random colours
-        "9": "#" + Math.random().toString(16).substring(2, 8),
-        "10": "#" + Math.random().toString(16).substring(2, 8),
-        "11": "#" + Math.random().toString(16).substring(2, 8),
-    }
-    return newColorObj
-}
+
 
 function changeBtnBg(color){
     let arr = [];
     let divArray =  document.querySelectorAll(".color");
     divArray.forEach(e => arr.push(e.classList.contains("locked")));
-    console.log(arr);
     if (arr.includes(true)){
-        console.log(divArray);
+        
     }
     btnArray.forEach((btn)=>{
         btn.style.backgroundColor = color; 
