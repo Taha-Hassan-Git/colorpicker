@@ -13,7 +13,7 @@ let previousColors = []
 // Helper functions: 
 //                   howManyLocked         || checks which divs are locked
 //                   similarColors         || returns an object of similar colors from a seed color
-//                   changeBtnBg           || updates the btn color
+//                   changeBtnBg           || updates the btn colour
 //                   updateColors          || changes the appearance of the divs to match the generated colors
 //                   hex2Rgb/rgbtohex      || translate color values between the two standards
 //                   getRandomIntInclusive || generates random ints
